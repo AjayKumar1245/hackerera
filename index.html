@@ -244,6 +244,12 @@
             chatBox.innerHTML += userMessage + botMessage;
             chatBox.scrollTop = chatBox.scrollHeight;
             inputField.value = "";
+        
+        }
+        function speakText(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = selectedLanguage; 
+            speechSynthesis.speak(utterance);
         }
     </script>
 
