@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agriculture Chatbot</title>
+    <title>Chatbot</title>
     <style>
-        /* General Page Styling */
         body {
             font-family: Arial, sans-serif;
             background: url('https://cdn.pixabay.com/photo/2024/04/08/14/09/nature-8683570_1280.jpg') no-repeat center center/cover;
@@ -15,6 +14,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
 
         /* Hide Language Selection and Chat Initially */
@@ -34,41 +34,46 @@
             border-radius: 10px;
         }
 
-        /* Language Selection Styling */
+        /* 🔹 Bigger Language Selection Container */
         #language-container {
-            text-align: center;
+            display: none;
+            width: 50%;
             background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 15px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
         }
-        .lang-btn {
+
+        #language-container h2 {
+            margin-bottom: 20px;
+        }
+
+        #language-container button {
             padding: 12px 20px;
-            margin: 5px;
+            margin: 10px;
+            font-size: 18px;
             border: none;
             background: #ffcc00;
             color: #333;
             font-weight: bold;
-            border-radius: 20px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
-        }
-        .lang-btn:hover {
-            background: #e6b800;
         }
 
-        /* Chatbot Styling */
+        /* 🔹 Bigger Chatbot Container */
         .chat-container {
-            width: 50%;
-            height: 70vh;
+            width: 60%;
+            height: 80vh;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
         }
+
         .chat-box {
             flex: 1;
             overflow-y: auto;
@@ -76,7 +81,9 @@
             border-bottom: 2px solid #ddd;
             display: flex;
             flex-direction: column;
+            max-height: calc(80vh - 120px);
         }
+
         .chat-message {
             padding: 10px 15px;
             margin: 10px;
@@ -95,11 +102,17 @@
             text-align: left;
         }
 
-        /* Input Section (Proper Alignment for All Elements) */
+        .speak-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 5px;
+        }
+
         .input-container {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             padding: 10px;
             background: #fff;
             border-top: 2px solid #ddd;
@@ -107,18 +120,13 @@
             box-sizing: border-box;
             gap: 10px;
         }
-
-        /* Fix for Input Box */
         input {
             flex: 1;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 20px;
-            outline: none;
             font-size: 16px;
         }
-
-        /* Fix for Send Button */
         button {
             padding: 12px 20px;
             border: none;
@@ -130,7 +138,6 @@
             font-size: 16px;
         }
 
-        /* Mic Button Proper Position */
         #mic-btn {
             background: #ff5733;
             color: white;
@@ -140,11 +147,10 @@
             width: 45px;
             height: 45px;
             cursor: pointer;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
         }
     </style>
 </head>
@@ -153,50 +159,50 @@
     <!-- 🔹 Intro Video Section -->
     <div id="intro-container">
         <video id="intro-video" class="intro-video" autoplay muted>
-            <source src="welcome.mp4" type="video/mp4">
+            <source src="C:\Users\91754\Downloads\welcome.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
 
-    <!-- 🔹 Language Selection Section -->
+    <!-- 🔹 Language Selection -->
     <div id="language-container">
         <h2>Select Your Language</h2>
-        <button class="lang-btn" onclick="selectLanguage('en-US')">English</button>
-        <button class="lang-btn" onclick="selectLanguage('ta-IN')">Tamil</button>
-        <button class="lang-btn" onclick="selectLanguage('kn-IN')">Kannada</button>
-        <button class="lang-btn" onclick="selectLanguage('ml-IN')">Malayalam</button>
-        <button class="lang-btn" onclick="selectLanguage('te-IN')">Telugu</button>
+        <button onclick="selectLanguage('en-US')">English</button>
+        <button onclick="selectLanguage('ta-IN')">Tamil</button>
+        <button onclick="selectLanguage('kn-IN')">Kannada</button>
+        <button onclick="selectLanguage('ml-IN')">Malayalam</button>
+        <button onclick="selectLanguage('te-IN')">Telugu</button>
     </div>
 
     <!-- 🔹 Chatbot Section -->
     <div id="chat-container" class="chat-container">
-        <h2 style="text-align: center; background: #ffcc00; padding: 10px;">Farmers Chatbot 🌿</h2>
+        <h2 style="text-align: center; background: #ffcc00; padding: 10px;">Chatbot</h2>
         <div class="chat-box" id="chat-box"></div>
 
         <div class="input-container">
-            <input type="text" id="user-input" placeholder="Ask about farming..." onkeypress="handleKeyPress(event)">
+            <input type="text" id="user-input" placeholder="Ask something..." onkeydown="handleKeyPress(event)">
             <button onclick="sendMessage()">Send</button>
             <button id="mic-btn" onclick="startSpeechRecognition()">🎤</button>
         </div>
     </div>
 
     <script>
-        let selectedLanguage = "en-US"; // Default language
+        let selectedLanguage = "en-US";
+        let messages = [];
+        let messageIndex = -1;
 
-        // 🌟 Auto-hide video and show language selection after 5 seconds
+        // 🌟 Hide video after 5 sec, show language selection
         setTimeout(function() {
             document.getElementById("intro-container").style.display = "none";
             document.getElementById("language-container").style.display = "block";
         }, 5000);
 
-        // 🌟 Show chatbot when language is selected
         function selectLanguage(lang) {
-            selectedLanguage = lang; // Set chosen language
+            selectedLanguage = lang;
             document.getElementById("language-container").style.display = "none";
             document.getElementById("chat-container").style.display = "block";
         }
 
-        // 🌟 Speech-to-Text Feature (Auto-Send)
         function startSpeechRecognition() {
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = selectedLanguage;
@@ -207,12 +213,19 @@
             };
 
             recognition.onend = function() {
-                sendMessage(); // 🌟 Auto-send message when mic stops
+                sendMessage();
             };
         }
 
         function handleKeyPress(event) {
             if (event.key === "Enter") sendMessage();
+            else if (event.key === "ArrowUp" && messageIndex > 0) {
+                messageIndex--;
+                event.target.value = messages[messageIndex];
+            } else if (event.key === "ArrowDown" && messageIndex < messages.length - 1) {
+                messageIndex++;
+                event.target.value = messages[messageIndex];
+            }
         }
 
         function sendMessage() {
@@ -221,9 +234,15 @@
             if (userText === "") return;
 
             let chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML += `<div class="chat-message user">${userText}</div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
 
+            messages.push(userText);
+            messageIndex = messages.length;
+
+            let userMessage = `<div class="chat-message user">${userText}</div>`;
+            let botMessage = `<div class="chat-message bot">This is a response <button class="speak-btn" onclick="speakText('This is a response')">🔊</button></div>`;
+
+            chatBox.innerHTML += userMessage + botMessage;
+            chatBox.scrollTop = chatBox.scrollHeight;
             inputField.value = "";
         }
     </script>
